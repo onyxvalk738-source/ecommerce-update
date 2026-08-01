@@ -1,40 +1,47 @@
 <?php
 
-namespace Config;
+namespace App\Config;
 
 use PDO;
 use PDOException;
 
-class Productos {
-    private string $host;
-    private string $dataBase;
-    private string $user;
-    private string $password;
+class Database {
+    private string $host = "localhost";
+    private string $database = "ECOMMERCE";
+    private string $user = "php";
+    private string $password = "";
     private string $charset;
 
-    public function __construct(string $host, string $dataBase,string $user, string $password, string $charset)
+    public function __construct(string $host, string $database,string $user, string $password, string $charset)
     {
         $this->host= $host;
-        $this->dataBase= $dataBase;
+        $this->database= $database;
         $this->user = $user;
         $this->password = $password;
         $this->charset = $charset;
 
     }
 
-    public function conexion()
+    public function devolverConexion(): PDO
     {
-        $dsn= "mysql:host = $this->host; dbname= $this->dataBase;charset=$this->charset ";
+        $dsn= "mysql:host=$this->host;dbname=$this->database;charset=$this->charset";
 
     try {
         $pdo= new PDO(
             $dsn, 
             $this->user,
-            $this->password
+            $this->password,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false
+            ]
+
         );
         return $pdo;
+
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        die ("Error." . $e->getMessage());
     }
 }
 
