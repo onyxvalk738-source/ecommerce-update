@@ -6,7 +6,7 @@ use App\Config\Database;
 use App\Models\Producto;
 use DateTime;
 
-class ProductoRepository 
+class ProductoRepository
 {
     private Database $database;
 
@@ -15,7 +15,7 @@ class ProductoRepository
         $this->database = $database;
     }
 
-     public function guardar(Producto $producto): void
+    public function guardar(Producto $producto): void
     {
         $pdo = $this->database->devolverConexion();
 
@@ -68,15 +68,84 @@ class ProductoRepository
 
         $productos = [];
 
-        foreach ($filas as $fila){
+        foreach ($filas as $fila) {
             $producto = $this->convertirEnProducto($fila);
 
             $productos[] = $producto;
         }
+
         return $productos;
     }
 
-    private function convertirEnProducto(array $fila): Producto
+    public function obtenerPorId(int $id): ?Producto
+    {
+        $pdo = $this->database->devolverConexion();
+
+        $sql = "SELECT * FROM productos
+                WHERE id = :id";
+
+        $sentencia = $pdo->prepare($sql);
+
+        $sentencia->execute([
+            "id" => $id
+        ]);
+
+        $fila = $sentencia->fetch();
+
+        if ($fila === false) {
+            return null;
+        }
+
+        return $this->convertirEnProducto($fila);
+    }
+
+    public function actualizar(Producto $producto): void
+    {
+        $pdo = $this->database->devolverConexion();
+
+        $sql = "UPDATE productos
+                SET
+                    id_categoria = :idCategoria,
+                    nombre = :nombre,
+                    fechaVencimiento = :fechaVencimiento,
+                    informacion = :informacion,
+                    codigo = :codigo,
+                    precio = :precio,
+                    unidades = :unidades,
+                    estado = :estado
+                WHERE id = :id";
+
+        $sentencia = $pdo->prepare($sql);
+
+        $sentencia->execute([
+            "id" => $producto->getId(),
+            "idCategoria" => $producto->getIdCategoria(),
+            "nombre" => $producto->getNombre(),
+            "fechaVencimiento" => $producto->getFechaVencimiento()->format("Y-m-d"),
+            "informacion" => $producto->getInformacion(),
+            "codigo" => $producto->getCodigo(),
+            "precio" => $producto->getPrecio(),
+            "unidades" => $producto->getUnidades(),
+            "estado" => $producto->getEstado()
+        ]);
+    }
+
+
+    public function eliminar(int $id): void
+    {
+        $pdo = $this->database->devolverConexion();
+
+        $sql = "DELETE FROM productos
+                WHERE id = :id";
+
+        $sentencia = $pdo->prepare($sql);
+
+         $sentencia->execute([
+            "id" => $id
+        ]);
+    }
+
+     private function convertirEnProducto(array $fila): Producto
     {
         return new Producto(
             $fila["id"],
@@ -89,28 +158,7 @@ class ProductoRepository
             $fila["unidades"],
             (bool) $fila["estado"]
         );
-
     }
 
-    public function obtenerPorId(int $id): ?Producto
-    {
-        $pdo = $this->database->devolverConexion();
 
-        $sql = "SELECT * FROM productos
-               WHERE id = :id";
-
-        $sentencia = $pdo->prepare($sql);
-
-        $sentencia->execute(["id" => $id]);
-
-        $fila = $sentencia->fetch();
-
-        if ($fila === false)
-            {
-                return null;
-            }
-
-            return $this->convertirEnProducto($fila);
-    }
 }
-    
