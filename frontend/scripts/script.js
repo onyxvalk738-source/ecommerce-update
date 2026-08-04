@@ -14,7 +14,7 @@ dir.append(api);
 
 
 async function get() {
-    var response = await fetch('127.0.0.1:1337');
+    var response = await fetch('http://127.0.0.1:1337');
 
     var data = await response.json();
     console.log(data.body);
