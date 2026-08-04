@@ -1,4 +1,5 @@
 var dir = document.getElementById('show-api');
+var buttom = document.getElementById('get');
 
 
 console.log(dir);
@@ -10,6 +11,8 @@ dir.append(api);
 
 
 
+
+
 async function get() {
     var response = await fetch('127.0.0.1:1337');
 
@@ -18,6 +21,10 @@ async function get() {
     api.innerHTML = data;
 
 }
+
+buttom.addEventListener("click", () => {
+    get();
+})
 
 
 
