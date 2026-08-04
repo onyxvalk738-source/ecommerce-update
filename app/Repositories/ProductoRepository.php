@@ -160,5 +160,22 @@ class ProductoRepository
         );
     }
 
+    public function existeCodigo(string $codigo): bool
+    {
+        $pdo = $this->database->devolverConexion();
+
+        $sql = "SELECT id 
+                FROM productos
+                WHERE codigo = :codigo";
+        
+        $sentencia = $pdo->prepare($sql);
+
+        $sentencia->execute(["codigo" => $codigo]);
+
+        $fila = $sentencia->fetch();
+
+        return $fila !== false;
+    }
+
 
 }
