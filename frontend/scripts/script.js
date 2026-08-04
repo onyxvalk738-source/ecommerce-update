@@ -15,7 +15,7 @@ async function get() {
 
     var data = await response.json();
 
-    api.innerText = data;
+    api.innerHTML = data;
 
 }
 
