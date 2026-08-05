@@ -17,7 +17,7 @@ class ProductoService
 
     public function guardar (Producto $producto): void
     {
-        $this->repository->guardar($producto);
+        $this->validarProducto($producto);
 
         if($producto->getPrecio() <= 0){
             throw new Exception("El precio del producto debe ser mayor que cero");
@@ -33,6 +33,37 @@ class ProductoService
 
         $this->repository->guardar($producto);
     }
+
+    public function obtenerPorId (int $id): Producto
+    {
+        $producto = $this->repository->obtenerPorId($id);
+
+        if($producto===null){
+            throw new Exception("El producto no existe.");
+        }
+
+        return $producto;
+    }
+
+    public function actualizar(Producto $producto): void
+    {
+        $this->obtenerPorId($producto->getId());
+
+        $this->validarProducto($producto);
+
+        $this->repository->actualizar($producto);
+    }
+
+    private function validarProducto(Producto $producto): void
+    {
+        if($producto->getPrecio() <=0 ) {
+            throw new Exception("");
+        }
+        if(trim($producto->getNombre()) === ""){
+            throw new Exception("");
+        }
+    }
 }
+
 
 
