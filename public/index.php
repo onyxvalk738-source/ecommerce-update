@@ -5,6 +5,7 @@ require_once "vendor/autoload.php";
 use App\Config\Database;
 use App\Models\Producto;
 use App\Repositories\ProductoRepository;
+use App\Services\ProductoService;
 
 $conexion = new Database(
     "localhost",
@@ -15,6 +16,8 @@ $conexion = new Database(
 );
 
 $repository = new ProductoRepository($conexion);
+
+$service = new ProductoService($repository);
 
 $producto = new Producto(
     null,
@@ -30,11 +33,20 @@ $producto = new Producto(
 
 // $repository->guardar($producto);
 
+try{
+    $service->guardar($producto);
+
+    echo "Producto guardado correctamente";
+
+}catch(Exception $e){
+    echo $e->getMessage();
+}
+
 echo "Producto guardado correctamente";
 
 echo PHP_EOL;
 
-$producto = $repository->obtenerPorId(1);
+$producto = $service->obtenerPorId(1);
 
 if ($producto !== null){
     echo $producto->getNombre();

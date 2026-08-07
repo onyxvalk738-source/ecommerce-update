@@ -60,7 +60,8 @@ class ProductoRepository
     {
         $pdo = $this->database->devolverConexion();
 
-        $sql = "SELECT * FROM productos";
+        $sql = "SELECT * FROM productos
+                WHERE deleted_at IS NULL";
 
         $sentencia = $pdo->query($sql);
 
@@ -82,7 +83,8 @@ class ProductoRepository
         $pdo = $this->database->devolverConexion();
 
         $sql = "SELECT * FROM productos
-                WHERE id = :id";
+                WHERE id = :id
+                AND deleted_at IS NULL";
 
         $sentencia = $pdo->prepare($sql);
 
@@ -135,7 +137,9 @@ class ProductoRepository
     {
         $pdo = $this->database->devolverConexion();
 
-        $sql = "DELETE FROM productos
+        $sql = "UPDATE productos
+                SET deleted_at = NOW(),
+                    update_at = NOW()
                 WHERE id = :id";
 
         $sentencia = $pdo->prepare($sql);
@@ -166,7 +170,8 @@ class ProductoRepository
 
         $sql = "SELECT id 
                 FROM productos
-                WHERE codigo = :codigo";
+                WHERE codigo = :codigo
+                AND deleted_at IS NULL";
         
         $sentencia = $pdo->prepare($sql);
 

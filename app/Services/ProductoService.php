@@ -19,14 +19,6 @@ class ProductoService
     {
         $this->validarProducto($producto);
 
-        if($producto->getPrecio() <= 0){
-            throw new Exception("El precio del producto debe ser mayor que cero");
-        }
-
-        if(trim($producto->getNombre())=== "") {
-            throw new Exception("El nombre del producto es obligatorio");
-        }
-
         if($this->repository->existeCodigo($producto->getCodigo())) {
         throw new Exception("Ya existe un producto con este codigo");
     }
@@ -56,12 +48,19 @@ class ProductoService
 
     private function validarProducto(Producto $producto): void
     {
-        if($producto->getPrecio() <=0 ) {
-            throw new Exception("");
+        if($producto->getUnidades() < 0 ) {
+            throw new Exception("El precio debe ser mayor que cero");
         }
         if(trim($producto->getNombre()) === ""){
-            throw new Exception("");
+            throw new Exception("El nombre es obligatorio");
         }
+    }
+
+    public function eliminar(int $id): void
+    {
+        $this->obtenerPorId($id);
+
+        $this->repository->eliminar($id);
     }
 }
 
