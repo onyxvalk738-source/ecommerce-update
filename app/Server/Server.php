@@ -28,13 +28,13 @@ $requestHandler = new ClosureRequestHandler(
 
         return new Response(
             status: HttpStatus::OK,
-            headers: [
+            
                 headers: [
     'Content-Type' => 'application/json',
     'Access-Control-Allow-Origin' => 'http://127.0.0.1:5500',
     'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers' => 'Content-Type, Authorization'
-       ],
+       
             ],
             body: 'Hola desde el proyecto de ecommerce!'
         );

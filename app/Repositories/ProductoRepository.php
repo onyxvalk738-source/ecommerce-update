@@ -182,5 +182,26 @@ class ProductoRepository
         return $fila !== false;
     }
 
+    public function existeCodigoExceptoId(string $codigo, int $id): bool
+    {
+        $pdo = $this->database->devolverConexion();
+
+        $sql = "SELECT id 
+                FROM productos
+                WHERE codigo = :codigo
+                AND id <> :id
+                AND deleted_at IS NULL";
+        
+        $sentencia = $pdo->prepare($sql);
+
+        $sentencia->execute(["codigo" => $codigo, "id" => $id
+        ]);
+
+        $fila = $sentencia->fetch();
+
+        return $fila !== false;
+
+
+    }
 
 }

@@ -43,6 +43,13 @@ class ProductoService
 
         $this->validarProducto($producto);
 
+        if($this->repository->existeCodigoExceptoId(
+            $producto->getCodigo(),
+            $producto->getId()
+        )) {
+            throw new Exception("Ya existe un producto con este codigo");
+        }
+
         $this->repository->actualizar($producto);
     }
 
@@ -53,6 +60,9 @@ class ProductoService
         }
         if(trim($producto->getNombre()) === ""){
             throw new Exception("El nombre es obligatorio");
+        }
+        if(trim($producto->getCodigo())=== "") {
+            throw new Exception("El codigo es obligatorio");
         }
     }
 
