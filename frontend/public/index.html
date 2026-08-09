@@ -4,27 +4,902 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="../css/style.css">
-    <title>Document</title>
+
+    <title>StockFlow | Inventario</title>
 </head>
 
 <body>
-    <header>
-        <h1>Api Backend</h1>
-    </header>
-    <main>
-        <div id="show-api" >
+
+    <div class="app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">
+                    SF
+                </div>
+
+                <div>
+                    <h2>StockFlow</h2>
+                    <span>Inventory System</span>
+                </div>
+            </div>
+
+            <nav class="navigation">
+
+                <p class="nav-title">GENERAL</p>
+
+                <a href="#" class="nav-item active">
+                    <span class="nav-icon">⌂</span>
+                    Dashboard
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">▦</span>
+                    Productos
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">◈</span>
+                    Categorías
+                </a>
+
+                <p class="nav-title">GESTIÓN</p>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">＋</span>
+                    Nuevo producto
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">↻</span>
+                    Movimientos
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    Configuración
+                </a>
+
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="help-card">
+                    <div class="help-icon">?</div>
+
+                    <div>
+                        <strong>¿Necesitas ayuda?</strong>
+                        <span>Consulta la documentación</span>
+                    </div>
+                </div>
+
+                <div class="profile">
+
+                    <div class="avatar">
+                        H
+                    </div>
+
+                    <div class="profile-info">
+                        <strong>Hal</strong>
+                        <span>Administrador</span>
+                    </div>
+
+                    <button class="profile-menu">
+                        ⋮
+                    </button>
+
+                </div>
+
+            </div>
+
+        </aside>
 
 
-            <button id="get">Click</button>
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
 
-        </div>
-    </main>
-    <footer>
+            <!-- TOPBAR -->
+            <header class="topbar">
 
-    </footer>
+                <div class="mobile-brand">
+                    <strong>StockFlow</strong>
+                </div>
 
-    <script src="../scripts/script.js"></script>
+                <div class="search-box">
+
+                    <span>⌕</span>
+
+                    <input
+                        type="text"
+                        placeholder="Buscar productos, códigos..."
+                    >
+
+                    <kbd>Ctrl K</kbd>
+
+                </div>
+
+                <div class="topbar-actions">
+
+                    <button class="icon-button notification">
+                        ♢
+                        <span></span>
+                    </button>
+
+                    <button class="icon-button">
+                        ☼
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- DASHBOARD -->
+            <section class="dashboard">
+
+                <div class="welcome">
+
+                    <div>
+                        <span class="eyebrow">RESUMEN DEL INVENTARIO</span>
+
+                        <h1>
+                            Hola, Hal
+                            <span class="wave">👋</span>
+                        </h1>
+
+                        <p>
+                            Aquí tienes una visión general de tu inventario.
+                        </p>
+                    </div>
+
+                    <button class="primary-button">
+                        <span>＋</span>
+                        Agregar producto
+                    </button>
+
+                </div>
+
+
+                <!-- STAT CARDS -->
+                <section class="stats-grid">
+
+                    <article class="stat-card purple">
+
+                        <div class="stat-top">
+                            <div class="stat-icon">
+                                ▦
+                            </div>
+
+                            <span class="stat-change positive">
+                                ↑ 12.5%
+                            </span>
+                        </div>
+
+                        <span class="stat-label">
+                            Total productos
+                        </span>
+
+                        <strong class="stat-number">
+                            248
+                        </strong>
+
+                        <span class="stat-description">
+                            productos registrados
+                        </span>
+
+                    </article>
+
+
+                    <article class="stat-card blue">
+
+                        <div class="stat-top">
+                            <div class="stat-icon">
+                                ◈
+                            </div>
+
+                            <span class="stat-change positive">
+                                ↑ 8.2%
+                            </span>
+                        </div>
+
+                        <span class="stat-label">
+                            Valor del inventario
+                        </span>
+
+                        <strong class="stat-number">
+                            $48.6M
+                        </strong>
+
+                        <span class="stat-description">
+                            valor total estimado
+                        </span>
+
+                    </article>
+
+
+                    <article class="stat-card orange">
+
+                        <div class="stat-top">
+                            <div class="stat-icon">
+                                !
+                            </div>
+
+                            <span class="stat-change negative">
+                                Atención
+                            </span>
+                        </div>
+
+                        <span class="stat-label">
+                            Stock bajo
+                        </span>
+
+                        <strong class="stat-number">
+                            17
+                        </strong>
+
+                        <span class="stat-description">
+                            productos necesitan reposición
+                        </span>
+
+                    </article>
+
+
+                    <article class="stat-card green">
+
+                        <div class="stat-top">
+                            <div class="stat-icon">
+                                ✓
+                            </div>
+
+                            <span class="stat-change positive">
+                                96.4%
+                            </span>
+                        </div>
+
+                        <span class="stat-label">
+                            Disponibilidad
+                        </span>
+
+                        <strong class="stat-number">
+                            96.4%
+                        </strong>
+
+                        <span class="stat-description">
+                            productos disponibles
+                        </span>
+
+                    </article>
+
+                </section>
+
+
+                <!-- CONTENT GRID -->
+                <section class="content-grid">
+
+                    <!-- PRODUCT TABLE -->
+                    <article class="panel products-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+                                <span class="eyebrow">
+                                    INVENTARIO
+                                </span>
+
+                                <h2>
+                                    Productos recientes
+                                </h2>
+                            </div>
+
+                            <a href="#" class="view-all">
+                                Ver todos →
+                            </a>
+
+                        </div>
+
+
+                        <div class="filters">
+
+                            <div class="table-search">
+                                ⌕
+                                <input
+                                    type="text"
+                                    placeholder="Buscar producto..."
+                                >
+                            </div>
+
+                            <button class="filter-button">
+                                Categoría
+                                <span>⌄</span>
+                            </button>
+
+                            <button class="filter-button">
+                                Estado
+                                <span>⌄</span>
+                            </button>
+
+                        </div>
+
+
+                        <div class="table-wrapper">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+                                        <th>PRODUCTO</th>
+                                        <th>CÓDIGO</th>
+                                        <th>CATEGORÍA</th>
+                                        <th>PRECIO</th>
+                                        <th>STOCK</th>
+                                        <th>ESTADO</th>
+                                        <th></th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <tr>
+
+                                        <td>
+
+                                            <div class="product-cell">
+
+                                                <div class="product-image purple-product">
+                                                    KB
+                                                </div>
+
+                                                <div>
+                                                    <strong>
+                                                        Teclado Mecánico
+                                                    </strong>
+
+                                                    <span>
+                                                        Teclado mecánico RGB
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <span class="code">
+                                                TEC001
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            Periféricos
+                                        </td>
+
+                                        <td>
+                                            <strong>
+                                                $150.000
+                                            </strong>
+                                        </td>
+
+                                        <td>
+
+                                            <div class="stock">
+
+                                                <div class="stock-info">
+                                                    <strong>24</strong>
+                                                    <span>unidades</span>
+                                                </div>
+
+                                                <div class="stock-bar">
+                                                    <span
+                                                        class="stock-fill high"
+                                                        style="width: 80%"
+                                                    ></span>
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <span class="status active-status">
+                                                Activo
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <button class="more-button">
+                                                ⋮
+                                            </button>
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td>
+
+                                            <div class="product-cell">
+
+                                                <div class="product-image blue-product">
+                                                    MS
+                                                </div>
+
+                                                <div>
+                                                    <strong>
+                                                        Mouse Gaming
+                                                    </strong>
+
+                                                    <span>
+                                                        Mouse RGB 7200 DPI
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <span class="code">
+                                                MOU002
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            Periféricos
+                                        </td>
+
+                                        <td>
+                                            <strong>
+                                                $85.000
+                                            </strong>
+                                        </td>
+
+                                        <td>
+
+                                            <div class="stock">
+
+                                                <div class="stock-info">
+                                                    <strong>8</strong>
+                                                    <span>unidades</span>
+                                                </div>
+
+                                                <div class="stock-bar">
+                                                    <span
+                                                        class="stock-fill medium"
+                                                        style="width: 35%"
+                                                    ></span>
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <span class="status warning-status">
+                                                Stock bajo
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <button class="more-button">
+                                                ⋮
+                                            </button>
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td>
+
+                                            <div class="product-cell">
+
+                                                <div class="product-image pink-product">
+                                                    MN
+                                                </div>
+
+                                                <div>
+                                                    <strong>
+                                                        Monitor 24"
+                                                    </strong>
+
+                                                    <span>
+                                                        Monitor IPS Full HD
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <span class="code">
+                                                MON003
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            Monitores
+                                        </td>
+
+                                        <td>
+                                            <strong>
+                                                $780.000
+                                            </strong>
+                                        </td>
+
+                                        <td>
+
+                                            <div class="stock">
+
+                                                <div class="stock-info">
+                                                    <strong>15</strong>
+                                                    <span>unidades</span>
+                                                </div>
+
+                                                <div class="stock-bar">
+                                                    <span
+                                                        class="stock-fill high"
+                                                        style="width: 65%"
+                                                    ></span>
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <span class="status active-status">
+                                                Activo
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <button class="more-button">
+                                                ⋮
+                                            </button>
+                                        </td>
+
+                                    </tr>
+
+
+                                    <tr>
+
+                                        <td>
+
+                                            <div class="product-cell">
+
+                                                <div class="product-image orange-product">
+                                                    HD
+                                                </div>
+
+                                                <div>
+                                                    <strong>
+                                                        Disco SSD 1TB
+                                                    </strong>
+
+                                                    <span>
+                                                        SSD NVMe M.2
+                                                    </span>
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <span class="code">
+                                                SSD004
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            Almacenamiento
+                                        </td>
+
+                                        <td>
+                                            <strong>
+                                                $320.000
+                                            </strong>
+                                        </td>
+
+                                        <td>
+
+                                            <div class="stock">
+
+                                                <div class="stock-info">
+                                                    <strong>3</strong>
+                                                    <span>unidades</span>
+                                                </div>
+
+                                                <div class="stock-bar">
+                                                    <span
+                                                        class="stock-fill low"
+                                                        style="width: 15%"
+                                                    ></span>
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            <span class="status danger-status">
+                                                Agotándose
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <button class="more-button">
+                                                ⋮
+                                            </button>
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- RIGHT COLUMN -->
+                    <aside class="right-column">
+
+
+                        <!-- LOW STOCK -->
+                        <article class="panel low-stock-panel">
+
+                            <div class="panel-header">
+
+                                <div>
+                                    <span class="eyebrow">
+                                        ALERTAS
+                                    </span>
+
+                                    <h2>
+                                        Stock bajo
+                                    </h2>
+                                </div>
+
+                                <span class="alert-count">
+                                    4
+                                </span>
+
+                            </div>
+
+
+                            <div class="alert-list">
+
+                                <div class="alert-item">
+
+                                    <div class="alert-product red">
+                                        SSD
+                                    </div>
+
+                                    <div class="alert-info">
+                                        <strong>
+                                            Disco SSD 1TB
+                                        </strong>
+
+                                        <span>
+                                            Solo quedan 3 unidades
+                                        </span>
+                                    </div>
+
+                                    <span class="alert-arrow">
+                                        →
+                                    </span>
+
+                                </div>
+
+
+                                <div class="alert-item">
+
+                                    <div class="alert-product orange">
+                                        MS
+                                    </div>
+
+                                    <div class="alert-info">
+                                        <strong>
+                                            Mouse Gaming
+                                        </strong>
+
+                                        <span>
+                                            Solo quedan 8 unidades
+                                        </span>
+                                    </div>
+
+                                    <span class="alert-arrow">
+                                        →
+                                    </span>
+
+                                </div>
+
+
+                                <div class="alert-item">
+
+                                    <div class="alert-product yellow">
+                                        US
+                                    </div>
+
+                                    <div class="alert-info">
+                                        <strong>
+                                            USB 64GB
+                                        </strong>
+
+                                        <span>
+                                            Solo quedan 5 unidades
+                                        </span>
+                                    </div>
+
+                                    <span class="alert-arrow">
+                                        →
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <button class="outline-button">
+                                Ver todos los productos
+                            </button>
+
+                        </article>
+
+
+                        <!-- CATEGORIES -->
+                        <article class="panel categories-panel">
+
+                            <div class="panel-header">
+
+                                <div>
+                                    <span class="eyebrow">
+                                        DISTRIBUCIÓN
+                                    </span>
+
+                                    <h2>
+                                        Categorías
+                                    </h2>
+                                </div>
+
+                                <a href="#">
+                                    →
+                                </a>
+
+                            </div>
+
+
+                            <div class="category">
+
+                                <div class="category-info">
+
+                                    <div class="category-icon purple">
+                                        ◈
+                                    </div>
+
+                                    <div>
+                                        <strong>
+                                            Periféricos
+                                        </strong>
+
+                                        <span>
+                                            86 productos
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                                <strong>
+                                    35%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="category">
+
+                                <div class="category-info">
+
+                                    <div class="category-icon blue">
+                                        ▣
+                                    </div>
+
+                                    <div>
+                                        <strong>
+                                            Monitores
+                                        </strong>
+
+                                        <span>
+                                            42 productos
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                                <strong>
+                                    17%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="category">
+
+                                <div class="category-info">
+
+                                    <div class="category-icon orange">
+                                        ◫
+                                    </div>
+
+                                    <div>
+                                        <strong>
+                                            Almacenamiento
+                                        </strong>
+
+                                        <span>
+                                            35 productos
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                                <strong>
+                                    14%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="category">
+
+                                <div class="category-info">
+
+                                    <div class="category-icon green">
+                                        +
+                                    </div>
+
+                                    <div>
+                                        <strong>
+                                            Otros
+                                        </strong>
+
+                                        <span>
+                                            85 productos
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                                <strong>
+                                    34%
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+                    </aside>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
 </body>
 
 </html>
