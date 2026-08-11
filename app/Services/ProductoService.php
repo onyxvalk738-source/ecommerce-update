@@ -55,13 +55,13 @@ class ProductoService
 
     private function validarProducto(Producto $producto): void
     {
-        if($producto->getUnidades() < 0 ) {
+        if($producto->getPrecio() <= 0 ) {
             throw new Exception("El precio debe ser mayor que cero");
         }
-        if(trim($producto->getNombre()) === ""){
+        if($producto->getUnidades() < 0){
             throw new Exception("El nombre es obligatorio");
         }
-        if(trim($producto->getCodigo())=== "") {
+        if(trim($producto->getNombre())=== "") {
             throw new Exception("El codigo es obligatorio");
         }
     }

@@ -139,7 +139,7 @@ class ProductoRepository
 
         $sql = "UPDATE productos
                 SET deleted_at = NOW(),
-                    update_at = NOW()
+                    updated_at = NOW()
                 WHERE id = :id";
 
         $sentencia = $pdo->prepare($sql);
