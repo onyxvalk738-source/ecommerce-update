@@ -5,6 +5,13 @@ namespace App\Models;
 use DateTime;
 
 class Pedido{
+
+    public const ESTADO_PENDIENTE  = "pendiente";
+    public const ESTADO_PROCESADO  = "procesado";
+    public const ESTADO_ENVIADO    = "enviado";
+    public const ESTADO_ENTREGADO  = "entregado";
+    public const ESTADO_CANCELADO  = "cancelado";
+
     private ?int $id;
     private ?int $idCliente;
     private DateTime $fechaPedido;

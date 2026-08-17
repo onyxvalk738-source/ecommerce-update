@@ -128,6 +128,38 @@ class PedidoRepository
         ]);
     }
 
+    public function actualizarEstado(int $id, string $estado): void
+    {
+        $pdo = $this->database->devolverConexion();
+
+        $sql = "UPDATE pedidos
+                SET estado = :estado
+                WHERE id = :id";
+
+        $sentencia = $pdo->prepare($sql);
+
+        $sentencia->execute([
+            "id" => $id,
+            "estado" => $estado
+        ]);
+    }
+
+    public function actualizarTotal(int $id, float $total): void
+    {
+        $pdo = $this->database->devolverConexion();
+
+        $sql = "UPDATE pedidos
+                SET total = :total
+                WHERE id = :id";
+
+        $sentencia = $pdo->prepare($sql);
+
+        $sentencia->execute([
+            "id" => $id,
+            "total" => $total
+        ]);
+    }
+
     private function convertirEnPedido(array $fila): Pedido
     {
         return new Pedido(
