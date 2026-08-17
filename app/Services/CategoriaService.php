@@ -18,7 +18,7 @@ class CategoriaService
     public function validarCategoria(Categoria $categoria):void 
     {
         if(trim($categoria->getNombreCategoria()) === "") {
-            throw new Exception("")
+            throw new Exception("El nombre es obligatorio");
         }
     }
 
