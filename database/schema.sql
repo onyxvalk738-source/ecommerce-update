@@ -26,6 +26,31 @@ CREATE TABLE productos(
     foreign key (id_categoria) references categorias(id)
     );
 
+CREATE TABLE pedidos(
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_cliente BIGINT UNSIGNED NOT NULL,
+    fechaPedido DATE NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    total DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+);
+
+CREATE TABLE detalle_pedidos(
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_pedido BIGINT UNSIGNED NOT NULL,
+    id_producto BIGINT UNSIGNED NOT NULL,
+    cantidad INT NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    foreign key (id_pedido) references pedidos(id),
+    foreign key (id_producto) references productos(id)
+);
+
 INSERT INTO productos (
     id_categoria,
     nombre,
@@ -64,6 +89,8 @@ SELECT * FROM productos;
 
 SHOW CREATE TABLE categorias;
 DESC productos;
+DESC pedidos;
+DESC detalle_pedidos;
 
 
 
