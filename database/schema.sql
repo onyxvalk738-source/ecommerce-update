@@ -51,6 +51,18 @@ CREATE TABLE detalle_pedidos(
     foreign key (id_producto) references productos(id)
 );
 
+CREATE TABLE clientes (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    telefono VARCHAR(20) NOT NULL UNIQUE,
+    direccion VARCHAR(200) NOT NULL UNIQUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+);
+
 INSERT INTO productos (
     id_categoria,
     nombre,
