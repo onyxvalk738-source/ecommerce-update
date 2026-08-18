@@ -11,8 +11,14 @@ use Amp\Http\Server\SocketHttpServer;
 use Psr\Log\NullLogger;
 
 use App\Config\Database;
+use App\Models\DetallePedido;
+use App\Models\Pedido;
 use App\Models\Producto;
+use App\Repositories\DetallePedidoRepository;
+use App\Repositories\PedidoRepository;
 use App\Repositories\ProductoRepository;
+use App\Services\DetallePedidoService;
+use App\Services\PedidoService;
 use App\Services\ProductoService;
 
 use function Amp\trapSignal;
@@ -34,6 +40,12 @@ $database = new Database(
 
 $repository = new ProductoRepository($database);
 $service = new ProductoService($repository);
+
+$pedidoRepository = new PedidoRepository($database);
+$detalleRepository = new DetallePedidoRepository($database);
+
+$pedidoService = new PedidoService($pedidoRepository, $detalleRepository);
+$detalleService = new DetallePedidoService($detalleRepository, $repository, $pedidoService);
 
 
 /*
@@ -75,10 +87,51 @@ function productoArray(Producto $producto): array
     ];
 }
 
+function pedidoArray(Pedido $pedido): array
+{
+    return [
+        'id' => $pedido->getId(),
+        'idCliente' => $pedido->getIdCliente(),
+        'fechaPedido' => $pedido->getFechaPedido()->format('Y-m-d'),
+        'estado' => $pedido->getEstado(),
+        'total' => $pedido->getTotal()
+    ];
+}
+
+function detallePedidoArray(DetallePedido $detallePedido): array
+{
+    return [
+        'id' => $detallePedido->getId(),
+        'idPedido' => $detallePedido->getIdPedido(),
+        'idProducto' => $detallePedido->getIdProducto(),
+        'cantidad' => $detallePedido->getCantidad(),
+        'precio' => $detallePedido->getPrecioUnitario(),
+        'subtotal' => $detallePedido->getSubtotal()
+    ];
+}
+
 
 function obtenerIdDesdeRuta(string $path): ?int
 {
     if (preg_match('#^/productos/(\d+)$#', $path, $matches)) {
+        return (int) $matches[1];
+    }
+
+    return null;
+}
+
+function obtenerIdPedidoDesdeRuta(string $path): ?int
+{
+    if (preg_match('#^/pedidos/(\d+)$#', $path, $matches)) {
+        return (int) $matches[1];
+    }
+
+    return null;
+}
+
+function obtenerIdDetalleDesdeRuta(string $path): ?int
+{
+    if (preg_match('#^/detalle-pedidos/(\d+)$#', $path, $matches)) {
         return (int) $matches[1];
     }
 
@@ -94,7 +147,7 @@ function obtenerIdDesdeRuta(string $path): ?int
 
 $requestHandler = new ClosureRequestHandler(
 
-    function (Request $request) use ($service, $repository): Response {
+    function (Request $request) use ($service, $repository, $pedidoService, $detalleService, $pedidoRepository, $detalleRepository): Response {
 
         $method = $request->getMethod();
         $path = $request->getUri()->getPath();
@@ -146,6 +199,52 @@ $requestHandler = new ClosureRequestHandler(
 
             /*
             |--------------------------------------------------------------------------
+            | GET /pedidos
+            |--------------------------------------------------------------------------
+            */
+
+            if ($method === 'GET' && $path === '/pedidos') {
+
+                $pedidos = $pedidoRepository->obtenerTodos();
+
+                $resultado = [];
+
+                foreach ($pedidos as $pedido) {
+                    $resultado[] = pedidoArray($pedido);
+                }
+
+                return respuestaJson([
+                    'success' => true,
+                    'data' => $resultado
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | GET /detalle-pedidos
+            |--------------------------------------------------------------------------
+            */
+
+            if ($method === 'GET' && $path === '/detalle-pedidos') {
+
+                $detalles = $detalleRepository->obtenerTodos();
+
+                $resultado = [];
+
+                foreach ($detalles as $detalle) {
+                    $resultado[] = detallePedidoArray($detalle);
+                }
+
+                return respuestaJson([
+                    'success' => true,
+                    'data' => $resultado
+                ]);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
             | GET /productos/{id}
             |--------------------------------------------------------------------------
             */
@@ -161,6 +260,30 @@ $requestHandler = new ClosureRequestHandler(
                     return respuestaJson([
                         'success' => true,
                         'data' => productoArray($producto)
+                    ]);
+                }
+
+                $id = obtenerIdPedidoDesdeRuta($path);
+
+                if ($id !== null) {
+
+                    $pedido = $pedidoService->obtenerPorId($id);
+
+                    return respuestaJson([
+                        'success' => true,
+                        'data' => pedidoArray($pedido)
+                    ]);
+                }
+
+                $id = obtenerIdDetalleDesdeRuta($path);
+
+                if ($id !== null) {
+
+                    $detalle = $detalleService->obtenerPorId($id);
+
+                    return respuestaJson([
+                        'success' => true,
+                        'data' => detallePedidoArray($detalle)
                     ]);
                 }
             }
@@ -223,6 +346,104 @@ $requestHandler = new ClosureRequestHandler(
 
             /*
             |--------------------------------------------------------------------------
+            | POST /pedidos
+            |--------------------------------------------------------------------------
+            */
+
+            if ($method === 'POST' && $path === '/pedidos') {
+
+                $body = $request->getBody()->buffer();
+
+                $datos = json_decode($body, true);
+
+                if (!is_array($datos)) {
+
+                    return respuestaJson([
+                        'success' => false,
+                        'message' => 'JSON inválido'
+                    ], HttpStatus::BAD_REQUEST);
+                }
+
+
+                $pedido = new Pedido(
+                    null,
+
+                    isset($datos['idCliente'])
+                        ? (int) $datos['idCliente']
+                        : null,
+
+                    new DateTime(
+                        $datos['fechaPedido'] ?? 'now'
+                    ),
+
+                    $datos['estado'] ?? '',
+
+                    (float) ($datos['total'] ?? 0)
+                );
+
+
+                $pedidoService->guardar($pedido);
+
+
+                return respuestaJson([
+                    'success' => true,
+                    'message' => 'Pedido creado correctamente'
+                ], HttpStatus::CREATED);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | POST /detalle-pedidos
+            |--------------------------------------------------------------------------
+            */
+
+            if ($method === 'POST' && $path === '/detalle-pedidos') {
+
+                $body = $request->getBody()->buffer();
+
+                $datos = json_decode($body, true);
+
+                if (!is_array($datos)) {
+
+                    return respuestaJson([
+                        'success' => false,
+                        'message' => 'JSON inválido'
+                    ], HttpStatus::BAD_REQUEST);
+                }
+
+
+                $detallePedido = new DetallePedido(
+                    null,
+
+                    isset($datos['idPedido'])
+                        ? (int) $datos['idPedido']
+                        : null,
+
+                    isset($datos['idProducto'])
+                        ? (int) $datos['idProducto']
+                        : null,
+
+                    (int) ($datos['cantidad'] ?? 0),
+
+                    (float) ($datos['precio'] ?? 0),
+
+                    (float) ($datos['subtotal'] ?? 0)
+                );
+
+
+                $detalleService->guardar($detallePedido);
+
+
+                return respuestaJson([
+                    'success' => true,
+                    'message' => 'Detalle del pedido creado correctamente'
+                ], HttpStatus::CREATED);
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
             | PUT /productos/{id}
             |--------------------------------------------------------------------------
             */
@@ -279,6 +500,94 @@ $requestHandler = new ClosureRequestHandler(
                         'message' => 'Producto actualizado correctamente'
                     ]);
                 }
+
+                $id = obtenerIdPedidoDesdeRuta($path);
+
+                if ($id !== null) {
+
+                    $body = $request->getBody()->buffer();
+
+                    $datos = json_decode($body, true);
+
+                    if (!is_array($datos)) {
+
+                        return respuestaJson([
+                            'success' => false,
+                            'message' => 'JSON inválido'
+                        ], HttpStatus::BAD_REQUEST);
+                    }
+
+
+                    $pedido = new Pedido(
+                        $id,
+
+                        isset($datos['idCliente'])
+                            ? (int) $datos['idCliente']
+                            : null,
+
+                        new DateTime(
+                            $datos['fechaPedido'] ?? 'now'
+                        ),
+
+                        $datos['estado'] ?? '',
+
+                        (float) ($datos['total'] ?? 0)
+                    );
+
+
+                    $pedidoService->actualizar($pedido);
+
+
+                    return respuestaJson([
+                        'success' => true,
+                        'message' => 'Pedido actualizado correctamente'
+                    ]);
+                }
+
+                $id = obtenerIdDetalleDesdeRuta($path);
+
+                if ($id !== null) {
+
+                    $body = $request->getBody()->buffer();
+
+                    $datos = json_decode($body, true);
+
+                    if (!is_array($datos)) {
+
+                        return respuestaJson([
+                            'success' => false,
+                            'message' => 'JSON inválido'
+                        ], HttpStatus::BAD_REQUEST);
+                    }
+
+
+                    $detallePedido = new DetallePedido(
+                        $id,
+
+                        isset($datos['idPedido'])
+                            ? (int) $datos['idPedido']
+                            : null,
+
+                        isset($datos['idProducto'])
+                            ? (int) $datos['idProducto']
+                            : null,
+
+                        (int) ($datos['cantidad'] ?? 0),
+
+                        (float) ($datos['precio'] ?? 0),
+
+                        (float) ($datos['subtotal'] ?? 0)
+                    );
+
+
+                    $detalleService->actualizar($detallePedido);
+
+
+                    return respuestaJson([
+                        'success' => true,
+                        'message' => 'Detalle del pedido actualizado correctamente'
+                    ]);
+                }
             }
 
 
@@ -299,6 +608,30 @@ $requestHandler = new ClosureRequestHandler(
                     return respuestaJson([
                         'success' => true,
                         'message' => 'Producto eliminado correctamente'
+                    ]);
+                }
+
+                $id = obtenerIdPedidoDesdeRuta($path);
+
+                if ($id !== null) {
+
+                    $pedidoService->eliminar($id);
+
+                    return respuestaJson([
+                        'success' => true,
+                        'message' => 'Pedido eliminado correctamente'
+                    ]);
+                }
+
+                $id = obtenerIdDetalleDesdeRuta($path);
+
+                if ($id !== null) {
+
+                    $detalleService->eliminar($id);
+
+                    return respuestaJson([
+                        'success' => true,
+                        'message' => 'Detalle del pedido eliminado correctamente'
                     ]);
                 }
             }
